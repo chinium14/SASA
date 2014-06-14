@@ -9,4 +9,4 @@
 using namespace std;
 const double r_w = 1.4;
 const double pi = 3.14159265;
-const double s = 1.16;
+const double s = 2.8;

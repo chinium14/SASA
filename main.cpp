@@ -18,6 +18,7 @@ int main(int argc, char** argv)
    ifstream fp; 
    ofstream fp_out;
    fp.open(file_input.c_str());
+   fp_out.open(file_output.c_str());
 //     cout << "check point line 21" << endl; 
 
   /*Read the number of residues and coordinates and residue type for each*/ 
@@ -32,7 +33,8 @@ int main(int argc, char** argv)
   /*Read in residue types and coords*/ 
       int count = 0;
       vector< vector<double> > coords(num_resi, vector<double>(3));
-      while (!fp.eof() && num_resi != 0){
+     // cout << "check point line 36" << endl; 
+      while (!fp.eof() && num_resi != count){
         /*The first two columns are junk*/
          fp >> junk; fp >> junk;
         /*The third column is the residue type*/
@@ -42,11 +44,12 @@ int main(int argc, char** argv)
         /*The 5,6,7 th columns are coords*/
          for(int i =0; i <3; i++)
             fp >> coords[count][i];
-//     cout << "check point line 44" << endl; 
+//            cout << "check point line 50" << " with count= " << count << endl; 
         /*All rest columes are junk*/
          getline(fp, junk);
          ++count;
       } // while !fp.eof() && num_resi != 0
+//     cout << "check point line 53" << endl; 
 
   /*******************/
   /*Check radii table*/ 
@@ -57,7 +60,7 @@ int main(int argc, char** argv)
       cout <<  "Residue not found when checking radii table." << endl;
       return 2;
    }
-//     cout << "check point line 59" << endl; 
+    // cout << "check point line 59" << endl; 
   
   /********************/
   /*Do the calculation*/
@@ -65,31 +68,46 @@ int main(int argc, char** argv)
    vector<double> S(num_resi);
    double A[num_resi] , B[num_resi];
    double A_c = 0;
-   std::fill_n(B, num_resi, 1.0);
+   std::fill_n(B, num_resi, 0.0);
    
    double multiplier[num_resi];
+/*I suspect the read in radii are diameters, so devide them by 2*/
+   for (int i =0; i < num_resi; i++) radii[i] /= 2;
+
+
    for (int i = 0; i < num_resi; i++){
       S[i] = 4.0 * pi * (radii[i] + r_w) * (radii[i] + r_w);
-      //cout << radii[i] << endl;
+//      cout << "S["<< i <<"]"<< S[i] << endl;
       multiplier[i] = 1.0;  
+//      cout << "x : " << coords[i][0] << "\t y : " << coords[i][1] << "\t z : " << coords[i][2] << endl;
       for (int j = 0; j < num_resi; j++){
          if (j != i){
-            double d = sqrt((coords[i][0] - coords[j][0])*(coords[i][0] - coords[j][0]) + 
+            double d = sqrt((coords[i][0] - coords[j][0])*(coords[i][0] - coords[j][0]) +  
                             (coords[i][1] - coords[j][1])*(coords[i][1] - coords[j][1]) + 
                             (coords[i][2] - coords[j][2])*(coords[i][2] - coords[j][2]));
+            if (d< (radii[i]+ radii[j])) d = radii[i] + radii[j] -0.5;
+//      cout << "d = "<< d << endl;
             double b = pi*(radii[i] + r_w)*(radii[i] + radii[j] + 2.0 * r_w - d)*(1.0 + (radii[j] -radii[i])/d);
             if (b < 0.0) b = 0.0; // b_p could not be negative.
             double b_p = pi*(radii[i] + r_w)*(radii[i] + radii[j] + 2.0 * r_w - s - d)*(1.0 + (radii[j] - s -radii[i])/d);
             if (b_p < 0.0) b_p = 0.0; // b_p could not be negative.
+//            cout << "radii are " << radii[i] << " and "<< radii[j] << " and d = "<< d 
+//                 << " and r_w =" << r_w <<" and b_p = " << b_p << endl;
             multiplier[i] *=  (1.0 - (b - b_p)/S[i]);
+            if (i == 0) 
+             // cout << "multiplier[0] = "<< multiplier[0] << endl;
             B[i] += b_p; 
          } //if j != i
       }
       A[i] = S[i]*multiplier[i]; 
 //      cout << "multiplier " << i << " equals to " << multiplier[i] <<endl;
-      A_c += (A[i] -B[i]);
+     // cout << "A[i] = " << A[i] << ";\t" << "B[i] =" << B[i] << endl;
+      if (A[i] > B[i]) {
+         A_c += (A[i] -B[i]);  // A_c == 0 if A[i] < B[i]
+        // cout << "A_c = " << A_c <<endl; 
+      }
    }// for
-   fp_out.open(file_output.c_str());
+//   cout << "checkpoint 107" << endl;
    fp_out << A_c;
    
    fp.close();
