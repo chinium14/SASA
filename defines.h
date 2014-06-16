@@ -6,6 +6,7 @@
 #include<cstring>
 #include<vector>
 #include<math.h>
+#include<stdlib.h>
 using namespace std;
 const double r_w = 1.4;
 const double pi = 3.14159265;
