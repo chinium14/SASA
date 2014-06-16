@@ -18,8 +18,8 @@ int main(int argc, char** argv)
    }
   /*Open a pdb or crd file for inputs*/  
    string pdb_id = argv[1];
-   string file_input = "./BGO/" + pdb_id + ".crd";
-   string file_output = "./BGO/sasa_bgo_"+ pdb_id + ".dat";
+   string file_input =  pdb_id + ".crd";
+   string file_output = "sasa_bgo_"+ pdb_id + ".dat";
    ifstream fp; 
    ofstream fp_out;
    fp.open(file_input.c_str());
@@ -113,7 +113,7 @@ int main(int argc, char** argv)
       }
    }// for
 //   cout << "checkpoint 107" << endl;
-   fp_out << A_c;
+   fp_out << pdb_id << "\t" << A_c;
    
    fp.close();
    fp_out.close();
