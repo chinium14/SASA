@@ -13,12 +13,12 @@ int vdw_radii(vector<double>&, string *, int);
 int main(int argc, char** argv)
 {
    if (argc != 2) {
-      cout << "The program needs the pdb ID as an argument!" <<endl;
+      cout << "The program needs the <pdb_id>.crd as an argument!" <<endl;
       exit(EXIT_FAILURE);
    }
   /*Open a pdb or crd file for inputs*/  
-   string pdb_id = argv[1];
-   string file_input =  pdb_id + ".crd";
+   string file_input =  argv[1];
+   string pdb_id = file_input.substr(0,4);
    string file_output = "sasa_bgo_"+ pdb_id + ".dat";
    ifstream fp; 
    ofstream fp_out;
@@ -90,7 +90,10 @@ int main(int argc, char** argv)
             double d = sqrt((coords[i][0] - coords[j][0])*(coords[i][0] - coords[j][0]) +  
                             (coords[i][1] - coords[j][1])*(coords[i][1] - coords[j][1]) + 
                             (coords[i][2] - coords[j][2])*(coords[i][2] - coords[j][2]));
-            if (d< (radii[i]+ radii[j])) d = (radii[i] + radii[j])*0.85;
+//            if (d< (radii[i]+ radii[j]) && d > 4.0) d = (radii[i] + radii[j]);
+//            if (d<= 4.0) d = (radii[i] + radii[j])* 0.95;
+            if (d< (radii[i]+ radii[j])) d = (radii[i] + radii[j])*0.98;
+            if (d > (radii[i] + radii[j]) && d < (radii[i] + radii[j]+ 2*r_w)) d /= 1.03;
 //      cout << "d = "<< d << endl;
             double b = pi*(radii[i] + r_w)*(radii[i] + radii[j] + 2.0 * r_w - d)*(1.0 + (radii[j] -radii[i])/d);
             if (b < 0.0) b = 0.0; // b_p could not be negative.
