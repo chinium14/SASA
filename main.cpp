@@ -8,53 +8,91 @@
 #define MAIN
 #include "defines.h"
 
-int vdw_radii(vector<double>&, string *, int);
+int vdw_radii(vector<double>&, const vector<string>&, int);
 
 int main(int argc, char** argv)
 {
-   if (argc != 2) {
-      cout << "The program needs the <pdb_id>.crd as an argument!" <<endl;
+   if (argc != 3) {
+      cout << "argv[1] is the file type: either \"crd\" or \"pdb\"." <<endl;
+      cout << "argv[2] is the file name of an all-atom <pdb_id>.pdb or a Go-like <pdb_id>.crd." <<endl;
       exit(EXIT_FAILURE);
    }
   /*Open a pdb or crd file for inputs*/  
-   string file_input =  argv[1];
-   string pdb_id = file_input.substr(0,4);
+   string file_type = argv[1];
+   string file_input =  argv[2];
+   string pdb_id = file_input.substr(0,file_input.length()-4);
    string file_output = "sasa_bgo_"+ pdb_id + ".dat";
    ifstream fp; 
    ofstream fp_out;
    fp.open(file_input.c_str());
    fp_out.open(file_output.c_str());
-//     cout << "check point line 21" << endl; 
-
-  /*Read the number of residues and coordinates and residue type for each*/ 
    int num_resi = 0;
+   int count = 0;
+   string junk;
+   vector<string> resi_type(0); 
+   vector< vector<double> > coords(0, vector<double>(3));
+
    if (fp.is_open()){
-      string junk;
-//     cout << "check point line 27" << endl; 
-      fp >> num_resi;
-      string resi_type[num_resi];
-      cout << "number of residues is "<< num_resi << endl;
-      getline(fp,junk);
+      if (!file_type.compare("crd")){
+  /*Read the number of residues and coordinates and residue type for each*/ 
+   //     cout << "check point line 27" << endl; 
+         fp >> num_resi;
+//         resi_type = new string[num_resi];
+//         string resi_type[num_resi];
+         resi_type.resize(num_resi);
+         coords.resize(num_resi, vector<double>(3));
+         cout << "number of residues is "<< num_resi << endl;
+         getline(fp,junk);
   /*Read in residue types and coords*/ 
-      int count = 0;
-      vector< vector<double> > coords(num_resi, vector<double>(3));
-     // cout << "check point line 36" << endl; 
-      while (!fp.eof() && num_resi != count){
-        /*The first two columns are junk*/
-         fp >> junk; fp >> junk;
-        /*The third column is the residue type*/
-         fp >> resi_type[count];
-        /*The fourth column is junk again*/
-         fp >> junk; 
-        /*The 5,6,7 th columns are coords*/
-         for(int i =0; i <3; i++)
-            fp >> coords[count][i];
-//            cout << "check point line 50" << " with count= " << count << endl; 
-        /*All rest columes are junk*/
-         getline(fp, junk);
-         ++count;
-      } // while !fp.eof() && num_resi != 0
+        // cout << "check point line 36" << endl; 
+         string temp;
+         while (!fp.eof() && num_resi != count){
+           /*The first two columns are junk*/
+            fp >> junk; fp >> junk;
+           /*The third column is the residue type*/
+            fp >> resi_type[count]; 
+           /*The fourth column is junk again*/
+            fp >> junk; 
+           /*The 5,6,7 th columns are coords*/
+            for(int i =0; i <3; i++) fp >> coords[count][i];
+   //            cout << "check point line 50" << " with count= " << count << endl; 
+            /*All rest columes are junk*/
+            getline(fp, junk);
+            ++count;
+         } // while !fp.eof() && num_resi != 0
 //     cout << "check point line 53" << endl; 
+      } else if (!file_type.compare("pdb")){
+         string temp;
+         string temp_type;
+         string is_ca;
+         while (!fp.eof()){
+            vector<double> coor_temp(3);
+            fp >> temp;
+            if (!temp.compare("ATOM")) {
+               fp >> junk; fp >> is_ca;
+               if (!is_ca.compare("CA")){
+                  fp >> temp_type;
+                  resi_type.push_back(temp_type); fp >> junk; fp>>junk;
+                  cout << "resi_type["<<count<<"] = " << resi_type[count] << "\t";
+                  for (int j= 0; j<3; j++){ 
+                     fp >> coor_temp[j];
+                     cout << coor_temp[j] << "\t";
+                  }// for
+                  cout << "with count = "<< count << endl;
+                  
+                  coords.push_back(coor_temp);
+                  getline(fp, junk);
+                  ++count;
+               }else{
+                  getline(fp,junk);
+               }
+            }else{
+               getline(fp,junk);
+            }
+         }//while
+         num_resi = count;
+         cout << "num_resi = " << num_resi <<endl;
+      }//if crd or pdb
 
   /*******************/
   /*Check radii table*/ 

@@ -1,7 +1,7 @@
 /*Build up a checkout table of van der waals radii for residue types*/
 #include "defines.h"
 
-int vdw_radii(vector<double>& radii, string * resi_type, int size){
+int vdw_radii(vector<double>& radii, const vector<string>& resi_type, int size){
    string types[20] = {"ALA","ARG","ASN","ASP","CYS","GLN","GLU","GLY","HIS","ILE",
                        "LEU","LYS","MET","PHE","PRO","SER","THR","TRP","TYR","VAL"};
    double values[20] = {5.5491, 10.1201, 7.3412, 7.3823, 6.3746, 8.4633, 8.4108, 4.5417, 8.6180, 7.7378,
