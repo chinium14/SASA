@@ -1,5 +1,6 @@
 
 Example:
-./sasa 7LZM.crd
+./sasa crd 7LZM.crd
+./sasa pdb 2PGB.pdb
 
-with 7LZM.crd in the same folder.
+with 7LZM.crd and 2PGB.pdb in the same folder.
