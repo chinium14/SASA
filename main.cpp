@@ -72,13 +72,14 @@ int main(int argc, char** argv)
                fp >> junk; fp >> is_ca;
                if (!is_ca.compare("CA")){
                   fp >> temp_type;
+                  temp_type = temp_type.substr(temp_type.length()-3,3);
                   resi_type.push_back(temp_type); fp >> junk; fp>>junk;
-                  cout << "resi_type["<<count<<"] = " << resi_type[count] << "\t";
+       //           cout << "resi_type["<<count<<"] = " << resi_type[count] << "\t";
                   for (int j= 0; j<3; j++){ 
                      fp >> coor_temp[j];
-                     cout << coor_temp[j] << "\t";
+       //              cout << coor_temp[j] << "\t";
                   }// for
-                  cout << "with count = "<< count << endl;
+       //           cout << "with count = "<< count << endl;
                   
                   coords.push_back(coor_temp);
                   getline(fp, junk);
@@ -91,7 +92,7 @@ int main(int argc, char** argv)
             }
          }//while
          num_resi = count;
-         cout << "num_resi = " << num_resi <<endl;
+  //       cout << "num_resi = " << num_resi <<endl;
       }//if crd or pdb
 
   /*******************/
@@ -153,6 +154,7 @@ int main(int argc, char** argv)
         // cout << "A_c = " << A_c <<endl; 
       }
    }// for
+   A_c = (A_c +1229.9695) / 1.1347;
 //   cout << "checkpoint 107" << endl;
    fp_out << pdb_id << "\t" << A_c;
    
