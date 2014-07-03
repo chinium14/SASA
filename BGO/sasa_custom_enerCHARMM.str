@@ -3,9 +3,9 @@
 
 ! Calculate Surface Area Per Residue and write to a file
 
-!scalar wmain =  radius
+scalar wmain =  radius
 
-!coor surface accu 0.005 rprobe 1.4 weight
+coor surface accu 0.005 rprobe 1.4 weight
 
 open unit 1 write form name temp_resi.dat
 echu 1
