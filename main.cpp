@@ -22,10 +22,12 @@ int main(int argc, char** argv)
    string file_input =  argv[2];
    string pdb_id = file_input.substr(0,file_input.length()-4);
    string file_output = "sasa_bgo_"+ pdb_id + ".dat";
+   string file_output_resi = "sasa_bgo_"+ pdb_id + "_resi.dat";
    ifstream fp; 
    ofstream fp_out;
+   ofstream fp_out_resi;
    fp.open(file_input.c_str());
-   fp_out.open(file_output.c_str());
+   fp_out_resi.open(file_output_resi.c_str());
    int num_resi = 0;
    int count = 0;
    string junk;
@@ -130,9 +132,10 @@ int main(int argc, char** argv)
                             (coords[i][1] - coords[j][1])*(coords[i][1] - coords[j][1]) + 
                             (coords[i][2] - coords[j][2])*(coords[i][2] - coords[j][2]));
 //            if (d< (radii[i]+ radii[j]) && d > 4.0) d = (radii[i] + radii[j]);
-//            if (d<= 4.0) d = (radii[i] + radii[j])* 0.95;
-            if (d< (radii[i]+ radii[j])) d = (radii[i] + radii[j])*0.98;
-            if (d > (radii[i] + radii[j]) && d < (radii[i] + radii[j]+ 2*r_w)) d /= 1.03;
+//            if (d<= 6.0) d = (radii[i] + radii[j])* 0.9;
+            if (d< (radii[i]+ radii[j])) d = (radii[i] + radii[j]);
+//            if (d > (radii[i] + radii[j]) && d < (radii[i] + radii[j]+ 2*r_w)) d /= 1.03;
+            if (d > (radii[i] + radii[j])) d /= 1.048;
 //      cout << "d = "<< d << endl;
             double b = pi*(radii[i] + r_w)*(radii[i] + radii[j] + 2.0 * r_w - d)*(1.0 + (radii[j] -radii[i])/d);
             if (b < 0.0) b = 0.0; // b_p could not be negative.
@@ -148,14 +151,22 @@ int main(int argc, char** argv)
       }
       A[i] = S[i]*multiplier[i]; 
 //      cout << "multiplier " << i << " equals to " << multiplier[i] <<endl;
-     // cout << "A[i] = " << A[i] << ";\t" << "B[i] =" << B[i] << endl;
+//      cout << "A[i] = " << A[i] << ";\t" << "B[i] =" << B[i] << endl;
       if (A[i] > B[i]) {
          A_c += (A[i] -B[i]);  // A_c == 0 if A[i] < B[i]
-        // cout << "A_c = " << A_c <<endl; 
-      }
+//         fp_out_resi
+//         cout <<"Residue number "<< i <<"\t"<<  (A[i] -B[i]) <<endl;       
+         fp_out_resi << i <<"\t"<<  (A[i] -B[i]) <<endl;       
+//         cout << "A_c = " << A_c <<endl; 
+      }else {
+         fp_out_resi << i <<"\t"<<  0.0 <<endl;
+      }      
    }// for
-   A_c = (A_c +1229.9695) / 1.1347;
+//   A_c = (A_c +1304.85) / 1.1436;
 //   cout << "checkpoint 107" << endl;
+   fp_out_resi.close();
+   fp_out.open(file_output.c_str());
+//   cout << pdb_id << "\t" << A_c;
    fp_out << pdb_id << "\t" << A_c;
    
    fp.close();
