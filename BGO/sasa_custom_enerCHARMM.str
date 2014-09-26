@@ -14,7 +14,7 @@ set totsaa = 0
 label dores
       scalar wmain stat select ires @ires end
       calc totsaa = @totsaa + ?stot
-      echo @ires ?stot
+      echo @ires ?stot ?selresn
       scalar wmain set ?stot select ires @ires end
       incr ires by 1
 if ires le ?nres goto dores
