@@ -1,0 +1,80 @@
+1
+                 Chemistry at HARvard Macromolecular Mechanics
+           (CHARMM) - Developmental Version 38b2   February 15, 2014            
+                             Git commit ID ee25809                              
+       Copyright(c) 1984-2014  President and Fellows of Harvard College
+                              All Rights Reserved
+     Current operating system: Linux-2.6.32-358.14.1.el6.x86_64(x86_64)@gol     
+                 Created on  7/3/14 at 16:13:01 by user: shuaiwei    
+
+            Maximum number of ATOMS:     25140, and RESidues:        8380
+ RDTITL> * TITLE...
+ RDTITL> *
+  
+ CHARMM>     
+  
+ CHARMM>    UNBUFIO
+  
+ CHARMM>    open unit 10 read form name "/export/apps/MMTSB/data/toppar/top_all27_prot_na.rtf"
+ VOPEN> Attempting to open::/export/apps/MMTSB/data/toppar/top_all27_prot_na.rtf::
+ OPNLGU> Unit 10 opened for READONLY access to /export/apps/MMTSB/data/toppar/top_all27_prot_na.rtf
+  
+ CHARMM>    label PERLDONE
+  
+ CHARMM>    read rtf card unit 10
+ MAINIO> Residue topology file being read from unit  10.
+ TITLE> *>>>>>>>>CHARMM22 ALL-HYDROGEN TOPOLOGY FILE FOR PROTEINS <<<<<<<
+ TITLE> *>>>>>>>>>>>>>>>>>>>> AND NUCLEIC ACIDS <<<<<<<<<<<<<<<<<<<<<<<<<
+ TITLE> *>>>>> INCLUDES PHI, PSI CROSS TERM MAP (CMAP) CORRECTION <<<<<<<
+ TITLE> *>>>>>>>>>>>>>>>>>>>>>>   JULY, 2004    <<<<<<<<<<<<<<<<<<<<<<<<<<
+ TITLE> * ALL COMMENTS TO ADM JR. VIA THE CHARMM WEB SITE: WWW.CHARMM.ORG
+ TITLE> *               PARAMETER SET DISCUSSION FORUM
+ TITLE> *
+  
+ CHARMM>    label PERLDONE
+  
+ CHARMM>    close unit 10
+ VCLOSE: Closing unit   10 with status "KEEP"
+  
+ CHARMM>    label PERLDONE
+  
+ CHARMM>    open unit 10 read form name "/export/apps/MMTSB/data/toppar/par_all27_prot_na.prm"
+ VOPEN> Attempting to open::/export/apps/MMTSB/data/toppar/par_all27_prot_na.prm::
+ OPNLGU> Unit 10 opened for READONLY access to /export/apps/MMTSB/data/toppar/par_all27_prot_na.prm
+  
+ CHARMM>    label PERLDONE
+  
+ CHARMM>    read para card unit 10
+
+          PARAMETER FILE BEING READ FROM UNIT 10
+ TITLE> *>>>>> CHARMM22 ALL-HYDROGEN PARAMETER FILE FOR PROTEINS <<<<<<<<
+ TITLE> *>>>>>>>>>>>>>>>>>>>> AND NUCLEIC ACIDS <<<<<<<<<<<<<<<<<<<<<<<<<
+ TITLE> *>>>>> INCLUDES PHI, PSI CROSS TERM MAP (CMAP) CORRECTION <<<<<<<
+ TITLE> *>>>>>>>>>>>>>>>>>>>>>> DECEMBER, 2003 <<<<<<<<<<<<<<<<<<<<<<<<<<
+ TITLE> * ALL COMMENTS TO ADM JR. VIA THE CHARMM WEB SITE: WWW.CHARMM.ORG
+ TITLE> *               PARAMETER SET DISCUSSION FORUM
+ TITLE> *
+ PARMIO> NONBOND, HBOND lists and IMAGE atoms cleared.
+  
+ CHARMM>    label PERLDONE
+  
+ CHARMM>    close unit 10
+ VCLOSE: Closing unit   10 with status "KEEP"
+  
+ CHARMM>    label PERLDONE
+  
+ CHARMM>    faster on
+ MISCOM> FAST option: EXPANDED (limited fast routines)
+  
+ CHARMM>    label PERLDONE
+  
+ CHARMM>    stop
+$$$$$$  New timer profile $$$$$
+ Total time                      0.10 Other:            0.00
+
+                    NORMAL TERMINATION BY NORMAL STOP
+                    NO WARNINGS WERE ISSUED
+
+                    $$$$$ JOB ACCOUNTING INFORMATION $$$$$
+                     ELAPSED TIME:     0.10  SECONDS 
+                         CPU TIME:     0.10  SECONDS 
